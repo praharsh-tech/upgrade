@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Principal Dashboard</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+(function(){
+emailjs.init({ publicKey:"I8R-RN33kP7UQbaw9" });
+})();
+</script>
+
+<style>
+    .active-nav{
+    background-color:#1d4ed8;
+    }
+    </style>
+
+</head>
+
+<body class="bg-gray-100 flex min-h-screen">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="w-64 bg-blue-800 text-white p-6 space-y-4">
+
+<h2 class="text-2xl font-bold mb-6">Principal</h2>
+
+<nav class="space-y-2">
+
+<button id="navDashboard" class="block w-full text-left hover:bg-blue-700 p-2 rounded">Dashboard</button>
+
+<button id="navAssignTask" class="block w-full text-left hover:bg-blue-700 p-2 rounded">Assign Task</button>
+
+<button id="navAllTasks" class="block w-full text-left hover:bg-blue-700 p-2 rounded">All Tasks</button>
+
+<button id="navHodPerf" class="block w-full text-left hover:bg-blue-700 p-2 rounded">HOD Performance</button>
+
+<button id="navFacPerf" class="block w-full text-left hover:bg-blue-700 p-2 rounded">Faculty Performance</button>
+
+</nav>
+
+<button id="logoutBtn" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded w-full mt-10">
+Logout
+</button>
+
+</aside>
+
+<!-- ================= MAIN ================= -->
+
+<div class="flex-1 flex flex-col">
+
+<header class="bg-white shadow px-8 py-4 flex justify-between">
+
+<h1 class="text-xl font-bold">Principal Dashboard</h1>
+
+<p id="principalName" class="text-gray-600"></p>
+
+</header>
+
+<main class="p-8 space-y-10">
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboardSection">
+
+<h2 class="text-2xl font-semibold mb-6 text-blue-700">
+Dashboard Overview
+</h2>
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<div class="bg-white shadow rounded-xl p-6">
+
+<p class="text-gray-500">Total Tasks</p>
+
+<h3 id="totalTasks" class="text-3xl font-bold">0</h3>
+
+</div>
+
+<div class="bg-white shadow rounded-xl p-6">
+
+<p class="text-gray-500">Completed</p>
+
+<h3 id="completedTasks" class="text-3xl font-bold text-green-600">0</h3>
+
+</div>
+
+<div class="bg-white shadow rounded-xl p-6">
+
+<p class="text-gray-500">Pending</p>
+
+<h3 id="pendingTasks" class="text-3xl font-bold text-red-600">0</h3>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= ASSIGN TASK ================= -->
+
+<section id="assignTaskSection" class="hidden bg-white p-8 rounded-xl shadow">
+
+<h2 class="text-2xl font-semibold mb-6 text-blue-700">
+Assign New Task
+</h2>
+
+<input id="taskTitle" placeholder="Task Title"
+class="border p-3 rounded w-full mb-4">
+
+<textarea id="taskDesc" placeholder="Task Description"
+class="border p-3 rounded w-full mb-4"></textarea>
+
+<select id="taskNature" class="border p-3 rounded w-full mb-4">
+
+<option value="">Select Nature</option>
+<option value="Important">Important</option>
+<option value="Most Important">Most Important</option>
+
+</select>
+
+<input type="date" id="taskDeadline"
+class="border p-3 rounded w-full mb-4">
+
+<input id="userSearch" placeholder="Search User"
+class="border p-3 rounded w-full mb-4">
+
+<select id="assignTo" multiple
+class="border p-3 rounded w-full mb-4"></select>
+
+<input type="file" id="taskFile"
+class="border p-3 rounded w-full mb-4">
+
+<input id="supportPeople" placeholder="Support People"
+class="border p-3 rounded w-full mb-4">
+
+<button id="addTaskBtn"
+class="bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded w-full">
+Add Task
+</button>
+
+</section>
+
+<!-- ================= TASK LIST ================= -->
+
+<section id="taskListSection" class="hidden">
+
+<h2 class="text-2xl font-semibold mb-4 text-blue-700">
+All Tasks
+</h2>
+
+<input id="searchTask" placeholder="Search tasks..."
+class="border p-3 rounded w-full mb-4">
+
+<select id="filterStatus" class="border p-3 rounded mb-4">
+
+<option value="">All Status</option>
+<option value="Pending">Pending</option>
+<option value="Completed">Completed</option>
+
+</select>
+
+<div id="taskList" class="space-y-4"></div>
+
+</section>
+
+<!-- ================= HOD PERFORMANCE ================= -->
+
+<section id="hodPerfSection" class="hidden">
+
+<h2 class="text-2xl font-semibold mb-4 text-blue-700">
+HOD Performance
+</h2>
+
+<div id="hodPerformance" class="grid md:grid-cols-2 gap-6"></div>
+
+</section>
+
+<!-- ================= FACULTY PERFORMANCE ================= -->
+
+<section id="facPerfSection" class="hidden">
+
+<h2 class="text-2xl font-semibold mb-4 text-blue-700">
+Faculty Performance
+</h2>
+
+<div id="facultyPerformance" class="grid md:grid-cols-2 gap-6"></div>
+
+</section>
+
+</main>
+
+</div>
+
+<!-- ================= NAVIGATION SCRIPT ================= -->
+
+<script>
+
+function showSection(section){
+
+const sections=[
+"dashboardSection",
+"assignTaskSection",
+"taskListSection",
+"hodPerfSection",
+"facPerfSection"
+];
+
+sections.forEach(id=>{
+document.getElementById(id).classList.add("hidden");
+});
+
+document.getElementById(section).classList.remove("hidden");
+
+}
+
+document.getElementById("navDashboard").onclick=()=>showSection("dashboardSection");
+document.getElementById("navAssignTask").onclick=()=>showSection("assignTaskSection");
+document.getElementById("navAllTasks").onclick=()=>showSection("taskListSection");
+document.getElementById("navHodPerf").onclick=()=>showSection("hodPerfSection");
+document.getElementById("navFacPerf").onclick=()=>showSection("facPerfSection");
+
+</script>
+
+<script type="module" src="principal.js"></script>
+
+</body>
+</html>

@@ -2,7 +2,6 @@ import { loadHodProfile } from "../components/hodProfile.js";
 import { loadHodTasks , loadFacultyTasks } from "../components/hodTasks.js";
 import { setupHodActions, startTaskTimers } from "../components/hodActions.js";
 import { setupAssignTask } from "../components/hodAssignTask.js";
-
 /************************************************
 PAGE PROTECTION
 ************************************************/

@@ -4,14 +4,24 @@ return JSON.parse(localStorage.getItem("tasks")) || [];
 
 export function loadHodTasks(){
 
-const user = JSON.parse(localStorage.getItem("loggedInUser"));
-const tasks = getTasks();
+const tasks =
+JSON.parse(localStorage.getItem("tasks")) || [];
 
-const hodTasks = tasks.filter(t =>
-t.assignedTo.includes(user.username)
+const loggedInUser =
+JSON.parse(localStorage.getItem("loggedInUser"));
+
+const hodTasks = tasks.filter(task =>
+task.assignedTo.includes(loggedInUser.username) ||
+task.assignedBy === loggedInUser.username
 );
 
+/* render tasks */
+
 renderTasks(hodTasks);
+
+/* update dashboard */
+
+updateDashboard(tasks);
 
 }
 
@@ -170,5 +180,35 @@ Submit Task
 container.appendChild(div);
 
 });
+
+}
+
+function updateDashboard(tasks){
+
+const loggedInUser =
+JSON.parse(localStorage.getItem("loggedInUser"));
+
+const myTasks = tasks.filter(task =>
+task.assignedTo.includes(loggedInUser.username) ||
+task.assignedBy === loggedInUser.username
+);
+
+document.getElementById("totalTasks").textContent =
+myTasks.length;
+
+document.getElementById("completedTasks").textContent =
+myTasks.filter(t=>t.status==="Completed").length;
+
+document.getElementById("processingTasks").textContent =
+myTasks.filter(t=>t.status==="Processing").length;
+
+document.getElementById("pendingTasks").textContent =
+myTasks.filter(t=>t.status==="Pending").length;
+
+document.getElementById("lateTasks").textContent =
+myTasks.filter(t=>t.status==="Late").length;
+
+document.getElementById("failedTasks").textContent =
+myTasks.filter(t=>t.status==="Failed").length;
 
 }

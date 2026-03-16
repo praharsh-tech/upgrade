@@ -1,67 +1,118 @@
 import { users } from "../Data/Database.js";
+import { loadHodTasks } from "./hodTasks.js";
 
 function getTasks(){
 return JSON.parse(localStorage.getItem("tasks")) || [];
 }
 
 function saveTasks(tasks){
-localStorage.setItem("tasks",JSON.stringify(tasks));
+localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 export function setupAssignTask(){
 
-const facultySelect=document.getElementById("assignToSelect");
+const facultySelect = document.getElementById("assignToSelect");
+
+/************************************************
+LOAD FACULTY INTO DROPDOWN
+************************************************/
+
+facultySelect.innerHTML = `<option value="">Select Faculty</option>`;
 
 users
-.filter(u=>u.role==="faculty")
-.forEach(fac=>{
+.filter(user => user.role === "faculty")
+.forEach(user => {
 
-const option=document.createElement("option");
+const option = document.createElement("option");
 
-option.value=fac.username;
-option.textContent=`${fac.name} (${fac.dept})`;
+option.value = user.username;
+option.textContent = `${user.name} (${user.dept})`;
 
 facultySelect.appendChild(option);
 
 });
 
-document.getElementById("assignTaskForm")
-.addEventListener("submit",(e)=>{
+/************************************************
+ASSIGN TASK FORM
+************************************************/
+
+const form = document.getElementById("assignTaskForm");
+
+form.addEventListener("submit",(e)=>{
 
 e.preventDefault();
 
-const user = JSON.parse(localStorage.getItem("loggedInUser"));
+const loggedInUser =
+JSON.parse(localStorage.getItem("loggedInUser"));
 
-const faculty=facultySelect.value;
-const title=document.getElementById("taskTitle").value.trim();
-const desc=document.getElementById("taskDesc").value.trim();
-const deadline=document.getElementById("taskDeadline").value;
+const faculty = facultySelect.value;
+
+const title =
+document.getElementById("taskTitle").value.trim();
+
+const desc =
+document.getElementById("taskDesc").value.trim();
+
+const deadline =
+document.getElementById("taskDeadline").value;
+
+const fileInput =
+document.getElementById("taskFile");
+
+const file = fileInput.files[0];
 
 if(!faculty || !title || !desc || !deadline){
-alert("Fill all fields");
+
+alert("Please fill all fields");
 return;
+
 }
 
-const tasks=getTasks();
+const tasks = getTasks();
+
+const saveTask = (fileData=null)=>{
 
 tasks.push({
 
-id:Date.now(),
+id: Date.now(),
 title,
-description:desc,
+description: desc,
 deadline,
-assignedBy:user.username,
-assignedTo:[faculty],
-status:"Pending",
-createdAt:new Date().toLocaleString()
+assignedBy: loggedInUser.username,
+assignedTo: [faculty],
+status: "Pending",
+file: fileData,
+createdAt: new Date().toLocaleString()
 
 });
 
 saveTasks(tasks);
 
-alert("Task assigned");
+alert("Task assigned to faculty");
 
-document.getElementById("assignTaskForm").reset();
+form.reset();
+
+loadHodTasks();
+
+};
+
+/************************************************
+FILE UPLOAD
+************************************************/
+
+if(file){
+
+const reader = new FileReader();
+
+reader.onload = () => saveTask(reader.result);
+
+reader.readAsDataURL(file);
+
+}else{
+
+saveTask();
+
+}
 
 });
 

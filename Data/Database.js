@@ -39,7 +39,7 @@ export const users = [
     phone:"9999990103",
     dept:"Electrical",
     role:"hod",
-    pfp:"https://via.placeholder.com/150"
+    pfp:"../"
     },
     
     {
@@ -51,19 +51,19 @@ export const users = [
     phone:"9999990175",
     dept:"Computer",
     role:"hod",
-    pfp:"https://via.placeholder.com/150"
+    pfp:"../images/computer HOD.jpeg"
     },
     
     {
     id:5,
-    name:"Natish Sayyed",
+    name:"Rashmi gomkar",
     username:"hod_ce",
     password:"1234",
     email:"natish@college.edu",
     phone:"9999990107",
     dept:"Civil",
     role:"hod",
-    pfp:"https://via.placeholder.com/150"
+    pfp:"../images/civilhod.jpeg"
     },
     
     {
@@ -75,7 +75,7 @@ export const users = [
     phone:"9999990110",
     dept:"Electronics",
     role:"hod",
-    pfp:"https://via.placeholder.com/150"
+    pfp:"../images/electronics_hod.jpeg"
     },
     
     {
@@ -87,7 +87,7 @@ export const users = [
     phone:"9999990112",
     dept:"Mechanical",
     role:"hod",
-    pfp:"https://via.placeholder.com/150"
+    pfp:"../images/mechanical hod.jpeg"
     },
     
     {

@@ -97,6 +97,9 @@ div.className="bg-white p-6 rounded-xl shadow";
 
 div.innerHTML=`
 
+<h5 class="text-sm font-semibold text-indigo-300">
+${task.assignedBy}
+</h5>
 <h3 class="text-lg font-semibold text-indigo-700">
 ${task.title}
 </h3>

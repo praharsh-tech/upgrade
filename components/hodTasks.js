@@ -125,34 +125,31 @@ container.innerHTML="<p>No tasks assigned</p>";
 return;
 }
 
-
-
 tasks.forEach(task=>{
 
 const div=document.createElement("div");
 
-div.className="bg-white p-5 rounded-xl shadow taskCard";
+div.className="bg-white p-5 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-300";
 
 div.innerHTML = `
 
-<div class="taskCard space-y-3">
-
-<!-- TITLE -->
 <h3 class="text-lg font-semibold text-blue-700">
 ${task.title}
 </h3>
 
-<!-- DESCRIPTION -->
 <p class="text-gray-600 text-sm">
 ${task.description}
 </p>
 
-<!-- DEADLINE -->
 <p class="text-sm">
 <strong>Deadline:</strong> ${task.deadline}
 </p>
 
-<!-- STATUS -->
+<p class="text-sm text-gray-500 timer font-semibold"
+data-deadline="${task.deadline}">
+⏳ Loading timer...
+</p>
+
 <div>
 <label class="text-sm font-medium">Status</label>
 
@@ -160,22 +157,13 @@ ${task.description}
 class="hodStatusSelect border p-2 w-full rounded mt-1"
 data-id="${task.id}">
 
-<option value="Pending" ${task.status==="Pending"?"selected":""}>
-Pending
-</option>
-
-<option value="Processing" ${task.status==="Processing"?"selected":""}>
-Processing
-</option>
-
-<option value="Completed" ${task.status==="Completed"?"selected":""}>
-Completed
-</option>
+<option value="Pending" ${task.status==="Pending"?"selected":""}>Pending</option>
+<option value="Processing" ${task.status==="Processing"?"selected":""}>Processing</option>
+<option value="Completed" ${task.status==="Completed"?"selected":""}>Completed</option>
 
 </select>
 </div>
 
-<!-- REPLY -->
 <div>
 <label class="text-sm font-medium">Reply</label>
 
@@ -185,7 +173,6 @@ data-id="${task.id}"
 placeholder="Write response...">${task.hodReply || ""}</textarea>
 </div>
 
-<!-- FILE -->
 <div>
 <label class="text-sm font-medium">Upload File</label>
 
@@ -195,16 +182,12 @@ class="hodFile border p-2 w-full rounded mt-1"
 data-id="${task.id}">
 </div>
 
-<!-- SUBMIT BUTTON -->
 <button
-class="submitTaskBtn hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full mt-2"
+class="submitTaskBtn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full mt-2"
 data-id="${task.id}">
-
 Submit Task
-
 </button>
 
-</div>
 `;
 
 container.appendChild(div);
@@ -212,4 +195,3 @@ container.appendChild(div);
 });
 
 }
-

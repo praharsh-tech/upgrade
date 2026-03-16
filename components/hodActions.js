@@ -8,46 +8,77 @@ function saveTasks(tasks){
 localStorage.setItem("tasks",JSON.stringify(tasks));
 }
 
+/************************************************
+TIMER SYSTEM
+************************************************/
+
 export function startTaskTimers(){
 
-document.querySelectorAll(".taskTimer").forEach(timer=>{
+function updateTimers(){
+
+const timers = document.querySelectorAll(".timer");
+
+timers.forEach(timer=>{
 
 const deadline = new Date(timer.dataset.deadline);
-
-function update(){
-
 const now = new Date();
+
 const diff = deadline - now;
 
 if(diff <= 0){
-timer.textContent = "Deadline Passed";
+
+const hoursLate = Math.abs(diff) / (1000*60*60);
+
+if(hoursLate <= 5){
+
+timer.textContent = "⚠️ Late";
+timer.className = "timer text-orange-500 font-semibold";
+
+}else{
+
+timer.textContent = "❌ Failed";
+timer.className = "timer text-red-600 font-semibold";
+
+}
+
 return;
 }
 
 const hours = Math.floor(diff/(1000*60*60));
 const minutes = Math.floor((diff%(1000*60*60))/(1000*60));
+const seconds = Math.floor((diff%(1000*60))/1000);
 
-timer.textContent = `${hours}h ${minutes}m`;
-
-}
-
-update();
-setInterval(update,60000);
+timer.textContent = `⏳ ${hours}h ${minutes}m ${seconds}s`;
 
 });
 
 }
 
+updateTimers();
+
+setInterval(updateTimers,1000);
+
+}
+
+/************************************************
+HOD ACTIONS
+************************************************/
+
 export function setupHodActions(){
+
+/* STATUS CHANGE */
 
 document.addEventListener("change",(e)=>{
 
 if(e.target.classList.contains("hodStatusSelect")){
 
 const id = Number(e.target.dataset.id);
+
 const tasks = getTasks();
 
 const task = tasks.find(t=>t.id===id);
+
+if(!task || task.locked) return;
 
 task.status = e.target.value;
 
@@ -66,6 +97,9 @@ submitBtn.classList.add("hidden");
 
 });
 
+
+/* SUBMIT TASK */
+
 document.addEventListener("click",(e)=>{
 
 if(e.target.classList.contains("submitTaskBtn")){
@@ -75,10 +109,15 @@ const id = Number(e.target.dataset.id);
 const tasks = getTasks();
 const task = tasks.find(t=>t.id===id);
 
-const reply=document.querySelector(`.hodReply[data-id="${id}"]`);
-const fileInput=document.querySelector(`.hodFile[data-id="${id}"]`);
+if(task.locked){
+alert("Task already submitted");
+return;
+}
 
-const file=fileInput.files[0];
+const reply = document.querySelector(`.hodReply[data-id="${id}"]`);
+const fileInput = document.querySelector(`.hodFile[data-id="${id}"]`);
+
+const file = fileInput.files[0];
 
 if(!reply.value){
 alert("Write reply");
@@ -90,21 +129,19 @@ alert("Upload file");
 return;
 }
 
-if(task.status==="Completed"){
-submitBtn.classList.remove("hidden")
-}
-const reader=new FileReader();
+const reader = new FileReader();
 
-reader.onload=function(){
+reader.onload = function(){
 
-task.hodReply=reply.value;
-task.hodFile=reader.result;
-task.status="Completed";
-task.locked=true;
+task.hodReply = reply.value;
+task.hodFile = reader.result;
+
+task.status = "Completed";
+task.locked = true;
 
 saveTasks(tasks);
 
-alert("Task submitted");
+alert("Task submitted successfully");
 
 loadHodTasks();
 

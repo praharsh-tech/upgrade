@@ -12,6 +12,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 (function(){
 emailjs.init({ publicKey:"I8R-RN33kP7UQbaw9" });
@@ -36,7 +37,12 @@ emailjs.init({ publicKey:"I8R-RN33kP7UQbaw9" });
 
 <nav class="space-y-2">
 
-<button id="navDashboard" class="block w-full text-left hover:bg-blue-700 p-2 rounded">Dashboard</button>
+<button id="navDashboard"
+class="w-full text-left p-3 rounded-lg transition-all duration-200 hover:bg-blue-600 hover:pl-4 hover:shadow-md">
+
+🏠 Dashboard
+
+</button>
 
 <button id="navAssignTask" class="block w-full text-left hover:bg-blue-700 p-2 rounded">Assign Task</button>
 
@@ -79,31 +85,31 @@ Dashboard Overview
 <div class="grid md:grid-cols-5 gap-6">
 
 <!-- TOTAL -->
-<div class="bg-white shadow rounded-xl p-6">
+<div class="bg-white p-6 rounded-xl shadow transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer">
 <p class="text-gray-500">Total Tasks</p>
 <h3 id="totalTasks" class="text-3xl font-bold">0</h3>
 </div>
 
 <!-- COMPLETED -->
-<div class="bg-white shadow rounded-xl p-6">
+<div class="bg-white p-6 rounded-xl shadow transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer">
 <p class="text-gray-500">Completed</p>
 <h3 id="completedTasks" class="text-3xl font-bold text-green-600">0</h3>
 </div>
 
 <!-- PENDING -->
-<div class="bg-white shadow rounded-xl p-6">
+<div class="bg-white p-6 rounded-xl shadow transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer">
 <p class="text-gray-500">Pending</p>
 <h3 id="pendingTasks" class="text-3xl font-bold text-yellow-600">0</h3>
 </div>
 
 <!-- LATE -->
-<div class="bg-white shadow rounded-xl p-6">
+<div class="bg-white p-6 rounded-xl shadow transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer">
 <p class="text-gray-500">Late</p>
 <h3 id="lateTasks" class="text-3xl font-bold text-orange-500">0</h3>
 </div>
 
 <!-- FAILED -->
-<div class="bg-white shadow rounded-xl p-6">
+<div class="bg-white p-6 rounded-xl shadow transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] cursor-pointer">
 <p class="text-gray-500">Failed</p>
 <h3 id="failedTasks" class="text-3xl font-bold text-red-600">0</h3>
 </div>

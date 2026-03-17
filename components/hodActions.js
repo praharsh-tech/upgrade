@@ -9,7 +9,7 @@ localStorage.setItem("tasks",JSON.stringify(tasks));
 }
 
 /************************************************
-TIMER SYSTEM
+TIMER SYSTEM (FIXED)
 ************************************************/
 
 export function startTaskTimers(){
@@ -21,8 +21,16 @@ const timers = document.querySelectorAll(".timer");
 timers.forEach(timer=>{
 
 const deadline = new Date(timer.dataset.deadline);
-const now = new Date();
+const status = timer.dataset.status; // 🔥 important
 
+/* ✅ STOP TIMER IF COMPLETED */
+if(status === "Completed"){
+timer.textContent = "✅ Completed";
+timer.className = "timer text-green-600 font-semibold";
+return;
+}
+
+const now = new Date();
 const diff = deadline - now;
 
 if(diff <= 0){
@@ -30,15 +38,11 @@ if(diff <= 0){
 const hoursLate = Math.abs(diff) / (1000*60*60);
 
 if(hoursLate <= 5){
-
 timer.textContent = "⚠️ Late";
 timer.className = "timer text-orange-500 font-semibold";
-
 }else{
-
 timer.textContent = "❌ Failed";
 timer.className = "timer text-red-600 font-semibold";
-
 }
 
 return;
@@ -55,13 +59,12 @@ timer.textContent = `⏳ ${hours}h ${minutes}m ${seconds}s`;
 }
 
 updateTimers();
-
 setInterval(updateTimers,1000);
 
 }
 
 /************************************************
-HOD ACTIONS
+HOD ACTIONS (FIXED)
 ************************************************/
 
 export function setupHodActions(){
@@ -75,7 +78,6 @@ if(e.target.classList.contains("hodStatusSelect")){
 const id = Number(e.target.dataset.id);
 
 const tasks = getTasks();
-
 const task = tasks.find(t=>t.id===id);
 
 if(!task || task.locked) return;
@@ -136,14 +138,15 @@ reader.onload = function(){
 task.hodReply = reply.value;
 task.hodFile = reader.result;
 
+/* 🔒 LOCK TASK */
 task.status = "Completed";
 task.locked = true;
 
 saveTasks(tasks);
 
-alert("Task submitted successfully");
+alert("Task submitted & locked");
 
-loadHodTasks();
+loadHodTasks(); // 🔥 re-render
 
 };
 

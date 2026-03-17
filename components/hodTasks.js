@@ -129,64 +129,105 @@ tasks.forEach(task=>{
 
 const div=document.createElement("div");
 
-div.className="bg-white p-5 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-300";
+/* 🔥 if locked → small square */
+const isLocked = task.locked;
+
+div.className = isLocked
+? "bg-white p-3 rounded-xl shadow h-48 flex flex-col justify-between"
+: "bg-white p-5 rounded-xl shadow hover:shadow-lg hover:-translate-y-1 transition-all duration-300";
 
 div.innerHTML = `
 
-<h3 class="text-lg font-semibold text-blue-700">
+<!-- TITLE -->
+<h3 class="text-sm font-semibold text-blue-700 truncate">
 ${task.title}
 </h3>
 
-<p class="text-gray-600 text-sm">
+<!-- DESCRIPTION -->
+<p class="text-xs text-gray-500 line-clamp-2">
 ${task.description}
 </p>
 
-<p class="text-sm">
-<strong>Deadline:</strong> ${task.deadline}
+<!-- DEADLINE -->
+<p class="text-xs">
+📅 ${task.deadline}
 </p>
 
-<p class="text-sm text-gray-500 timer font-semibold"
-data-deadline="${task.deadline}">
-⏳ Loading timer...
+<!-- TIMER -->
+<p class="text-xs font-semibold ${
+task.status==="Completed" ? "text-green-600" : "text-red-500"
+} timer"
+<span class="timer"
+data-deadline="${task.deadline}"
+data-status="${task.status}">
+</span>
+⏳ Loading...
 </p>
+
+<!-- STATUS -->
+<span class="px-2 py-0.5 text-[10px] rounded-full w-fit
+${task.status==="Completed" ? "bg-green-100 text-green-700" :
+task.status==="Processing" ? "bg-blue-100 text-blue-700" :
+task.status==="Late" ? "bg-yellow-100 text-yellow-700" :
+task.status==="Failed" ? "bg-red-100 text-red-700" :
+"bg-gray-100 text-gray-700"}">
+
+${task.status}
+
+</span>
+
+<!-- 🔓 IF NOT LOCKED → SHOW FORM -->
+${!isLocked ? `
 
 <div>
-<label class="text-sm font-medium">Status</label>
+<label class="text-xs">Status</label>
 
 <select
-class="hodStatusSelect border p-2 w-full rounded mt-1"
+class="hodStatusSelect border p-1 w-full rounded text-xs"
 data-id="${task.id}">
 
 <option value="Pending" ${task.status==="Pending"?"selected":""}>Pending</option>
 <option value="Processing" ${task.status==="Processing"?"selected":""}>Processing</option>
-<option value="Completed" ${task.status==="Completed"?"selected":""}>Completed</option>
+<option value="Completed">Completed</option>
 
 </select>
 </div>
 
-<div>
-<label class="text-sm font-medium">Reply</label>
-
 <textarea
-class="hodReply border p-2 w-full rounded mt-1"
+class="hodReply border p-1 w-full rounded text-xs"
+rows="2"
 data-id="${task.id}"
-placeholder="Write response...">${task.hodReply || ""}</textarea>
-</div>
-
-<div>
-<label class="text-sm font-medium">Upload File</label>
+placeholder="Reply...">${task.hodReply || ""}</textarea>
 
 <input
 type="file"
-class="hodFile border p-2 w-full rounded mt-1"
+class="hodFile border p-1 w-full rounded text-xs"
 data-id="${task.id}">
-</div>
 
 <button
-class="submitTaskBtn bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full mt-2"
+class="submitTaskBtn bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded w-full mt-1"
 data-id="${task.id}">
-Submit Task
+Submit
 </button>
+
+` : `
+
+<!-- 🔒 LOCKED VIEW -->
+<p class="text-xs text-gray-600">
+💬 ${task.hodReply || "No reply"}
+</p>
+
+${task.hodFile ? `
+<a href="${task.hodFile}" class="text-blue-600 text-xs underline">
+📎 File
+</a>
+` : ""}
+
+<p class="text-green-600 text-xs font-semibold">
+✅ Completed & Locked
+</p>
+
+`}
 
 `;
 

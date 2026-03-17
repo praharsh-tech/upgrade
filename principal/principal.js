@@ -4,6 +4,7 @@ import { setupTaskActions } from "../components/taskActions.js";
 import { setupFilters } from "../components/filters.js";
 import { loadHodPerformance, loadFacultyPerformance } from "../components/performance.js";
 import { loadDashboardStats } from "../components/dashboardStats.js";
+import { startTaskTimers } from "../components/taskActions.js";
 
 /************************************************
  PAGE PROTECTION
@@ -123,12 +124,16 @@ tasks.push(newTask);
 
 saveTasks(tasks);
 
+/* 🔔 ALERT */
+alert(`Task "${title}" assigned successfully to ${assignedTo.length} ${assignedTo}`);
+
 clearForm();
 
 renderTasks(tasks);
 
 loadHodPerformance();
 loadFacultyPerformance();
+
 
 };
 
@@ -179,3 +184,4 @@ setupFilters();
 loadHodPerformance();
 loadFacultyPerformance();
 loadDashboardStats()
+startTaskTimers()
